@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-canvas text-ink font-body antialiased;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.65;
+  }
+
+  /* Headings are the airy display serif, in MIXED CASE.
+     Previously these were forced to `font-body font-extrabold uppercase`,
+     which meant the display serif was loaded but never actually used for
+     headings. Weight 500 here keeps small headings (text-lg / text-xl on a
+     card) from looking anaemic; the `text-display-*` tokens carry their own
+     lighter weight and win because utilities outrank the base layer. */
+  h1, h2, h3, h4 {
+    @apply font-display font-medium normal-case text-ink;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+  }
+  /* Bare headings with no size utility get a sensible serif-optical size. */
+  h1:not([class*='text-']) { font-size: 2.6rem; }
+  h2:not([class*='text-']) { font-size: 2rem; }
+  h3:not([class*='text-']) { font-size: 1.55rem; }
+  h4:not([class*='text-']) { font-size: 1.3rem; }
+
+  ::selection {
+    @apply bg-gold/25 text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid theme('colors.gold.DEFAULT');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-editorial {
+    @apply mx-auto w-full max-w-content px-6 md:px-10;
+  }
+
+  .eyebrow {
+    @apply text-xs tracking-[0.22em] uppercase text-gold font-semibold font-body;
+  }
+
+  /* Intro / standfirst paragraph — the calm counterweight to a big serif
+     headline. Sans, roomy, muted. */
+  .lede {
+    @apply font-body text-base font-light leading-relaxed text-ink/70 md:text-lg;
+  }
+
+  /* One emphasis word inside a headline, set in the serif's italic and
+     tinted with the terracotta accent. */
+  .accent-italic {
+    @apply font-display normal-case text-gold;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* ── Glassmorphism system ────────────────────────────────────────────
+     Every interactive surface (buttons, cards, forms, the floating nav,
+     the mobile menu) draws from these two panels rather than flat fills. */
+
+  /* Light glass — for use over the cream canvas or photos. */
+  .glass-panel {
+    @apply bg-white/45 backdrop-blur-xl border border-white/60 shadow-glass;
+  }
+  /* Dark glass — for use over the hero gradient / ink footer. */
+  .glass-panel-dark {
+    @apply bg-ink/35 backdrop-blur-xl border border-white/15 shadow-glass;
+  }
+
+  .glass-card {
+    @apply glass-panel rounded-lg;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center gap-2.5 overflow-hidden rounded-full
+      bg-moss/85 backdrop-blur-md border border-white/20 px-7 py-3.5 text-sm font-semibold
+      tracking-wide text-canvas shadow-glass transition-all duration-400 ease-editorial
+      hover:-translate-y-0.5 hover:bg-moss;
+  }
+
+  .btn-secondary {
+    @apply relative inline-flex items-center gap-2.5 overflow-hidden rounded-full
+      bg-gold/80 backdrop-blur-md border border-white/20 px-7 py-3.5 text-sm font-semibold
+      tracking-wide text-canvas shadow-glass transition-all duration-400 ease-editorial
+      hover:-translate-y-0.5 hover:bg-gold;
+  }
+
+  .btn-outline {
+    @apply relative inline-flex items-center gap-2.5 rounded-full glass-panel
+      px-7 py-3.5 text-sm font-semibold tracking-wide text-ink
+      transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/65;
+  }
+
+  .btn-outline-dark {
+    @apply relative inline-flex items-center gap-2.5 rounded-full glass-panel-dark
+      px-7 py-3.5 text-sm font-semibold tracking-wide text-canvas
+      transition-all duration-300 hover:-translate-y-0.5 hover:bg-ink/50;
+  }
+
+  .btn-pill-sm {
+    @apply rounded-full glass-panel px-5 py-2.5 text-xs font-semibold tracking-wide text-ink
+      transition-all duration-300 hover:bg-white/65;
+  }
+
+  .input-field {
+    @apply mt-1.5 w-full rounded-lg glass-panel bg-white/55 px-4 py-2.5 text-sm text-ink
+      placeholder:text-ink/35 transition-colors focus:border-moss/50 focus:outline-none;
+  }
+
+  .link-underline {
+    @apply relative inline-block after:absolute after:left-0 after:-bottom-0.5 after:h-px
+      after:w-full after:origin-right after:scale-x-0 after:bg-current
+      after:transition-transform after:duration-400 after:ease-editorial
+      hover:after:origin-left hover:after:scale-x-100;
+  }
+
+  .img-zoom {
+    @apply transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.06];
+  }
+
+  /* Reference site's dark hero / CTA gradient: dark olive top-left
+     bleeding into a warm rust-brown bottom-right. */
+  .hero-gradient {
+    background: radial-gradient(120% 140% at 8% 0%, #232819 0%, #2c2416 38%, #4a2a1c 68%, #7a3f22 100%);
+  }
+
+  /* Giant ghost/outline wordmark used in the footer background. */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(243, 235, 218, 0.14);
+  }
+
+  /* ── Brand mark ──────────────────────────────────────────────────────
+     The supplied logo is white-on-transparent artwork, but the mark has to
+     sit on the ink nav pill AND on the light glass menu card. Rather than
+     keep two recoloured copies of the file in sync, both layers are painted
+     with `currentColor` through a mask — so the mark inherits the text
+     colour of whatever surface it lands on, and `text-canvas` / `text-ink`
+     on the parent is the only thing a caller changes.
+
+     It is split in two because the ring — the tittle over the "i" — is the
+     only detached shape in the artwork, which makes it the one piece that
+     can move without tearing the handwriting apart. Both layers are cut
+     from the same source and verified to recompose to the original alpha
+     pixel-for-pixel, so at rest this is exactly the supplied lockup. */
+  .logo {
+    @apply relative inline-block align-middle;
+    aspect-ratio: 3252 / 1738;
+  }
+
+  .logo-word,
+  .logo-ring {
+    position: absolute;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  .logo-word {
+    inset: 0;
+    -webkit-mask-image: url('/images/wordmark-word.png');
+    mask-image: url('/images/wordmark-word.png');
+  }
+
+  /* Measured from the ring's bounding box in the source art (x 1732–1925,
+     y 293–501 of 3252×1738). These aren't taste — they are what keeps the
+     tittle sitting over its stem, so re-measure rather than nudge them. */
+  .logo-ring {
+    left: 53.26%;
+    top: 16.858%;
+    width: 5.966%;
+    height: 12.025%;
+    -webkit-mask-image: url('/images/wordmark-ring.png');
+    mask-image: url('/images/wordmark-ring.png');
+    /* transform is listed even though the hover gesture is a keyframe
+       animation: when the pointer leaves mid-breath the animation is dropped
+       and the ring would otherwise snap back to rest from wherever it was.
+       Animations outrank transitions in the cascade, so this is inert while
+       the loop is actually running. */
+    transition:
+      background-color 400ms theme('transitionTimingFunction.editorial'),
+      transform 700ms theme('transitionTimingFunction.editorial');
+  }
+
+  .logo:hover .logo-ring,
+  .logo-link:focus-visible .logo-ring {
+    animation: logo-breath 4.8s infinite;
+    /* The ring is only about 4px across in the nav pill, where a 16% scale
+       is too small to notice on its own — the tint is what makes the gesture
+       read at that size, and it is the entire hover state for anyone
+       browsing with reduced motion. */
+    background-color: theme('colors.gold.DEFAULT');
+  }
+}
+
+/* One breath, looped while the mark is hovered or focused: a 1.8s inhale, a
+   held beat at the top, then a longer 2.5s exhale. The long exhale is the
+   half that actually settles the nervous system in pranayama, so the
+   asymmetry is the point rather than a flourish.
+
+   Percentages are relative to the ring's own box, not the whole lockup,
+   because .logo-ring is sized to its bounding box. Kept outside @layer so
+   the at-rule isn't subject to layer ordering. The reduced-motion rule in
+   the base layer collapses this to a single 0.01ms pass, which is why the
+   colour change carries the state on its own. */
+@keyframes logo-breath {
+  0% {
+    transform: translateY(0) scale(1);
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  38%,
+  48% {
+    transform: translateY(-16%) scale(1.16);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.35, 1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}

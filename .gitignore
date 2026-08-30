@@ -1,0 +1,16 @@
+node_modules
+.next
+.env
+.env.local
+.vercel
+*.log
+.DS_Store
+
+# Capacitor native projects (android/ and ios/ themselves ARE committed —
+# Capacitor's own guidance — only their build output/dependency caches aren't).
+android/app/build
+android/.gradle
+android/local.properties
+ios/App/Pods
+ios/App/build
+ios/App/DerivedData
