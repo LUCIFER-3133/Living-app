@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireAdminPage } from '@/lib/auth';
 import { formatDate, formatINR } from '@/lib/utils';
 import { grantMembership, extendMembership, cancelMembership, setUserRole } from '@/lib/actions/members';
+import { sendInboxMessage } from '@/lib/actions/inbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,9 @@ const NOTICES: Record<string, { text: string; tone: 'moss' | 'gold' }> = {
   extend_failed: { text: 'Could not extend membership — check the server logs.', tone: 'gold' },
   cancel_failed: { text: 'Could not cancel membership — check the server logs.', tone: 'gold' },
   role_failed: { text: 'Could not update role — check the server logs.', tone: 'gold' },
+  sent: { text: 'Message sent.', tone: 'moss' },
+  fields_required: { text: 'A title and message are both required. Nothing was sent.', tone: 'gold' },
+  send_failed: { text: 'That message could not be sent — check the server logs.', tone: 'gold' },
 };
 
 export default async function AdminUserDetailPage({
@@ -91,6 +95,24 @@ export default async function AdminUserDetailPage({
           </button>
         </form>
       </div>
+
+      {/* ── Send a message ── */}
+      <section>
+        <h2 className="font-display text-xl">Send a message</h2>
+        <p className="mt-1 text-sm text-ink/55">Goes straight to their inbox in the app — see /admin/inbox to message everyone at once instead.</p>
+        <form action={sendInboxMessage} className="mt-4 space-y-4 glass-card p-6">
+          <input type="hidden" name="user_id" value={id} />
+          <div>
+            <label className="text-sm font-medium text-ink">Title</label>
+            <input name="title" required maxLength={120} className="input-field" placeholder="About your last class" />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-ink">Message</label>
+            <textarea name="body" required rows={3} className="input-field resize-none" placeholder="What you want to tell them" />
+          </div>
+          <button type="submit" className="btn-outline !px-4 !py-2 !text-xs"><span>Send</span></button>
+        </form>
+      </section>
 
       {/* ── Membership ── */}
       <section>

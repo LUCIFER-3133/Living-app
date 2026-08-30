@@ -233,3 +233,35 @@ steps are yours to run, same category as the Razorpay/Sentry items above.
 "SaaS" (target #2) was confirmed to mean marketing the existing site as a
 product, not a separate multi-tenant build — so it's the same running code
 as the web app, nothing new to build there.
+
+## Round 5 — In-app Inbox (member messages + automatic reminders)
+
+Added a full inbox system:
+
+- **New table**: `supabase/inbox_messages` (`supabase/inbox.sql`, not yet run
+  against your database — same as the two pending files from Round 3). RLS:
+  members read/mark-read only their own rows; admins have full access; a
+  trigger blocks a member from editing anything but `read_at` on their own
+  row even if they bypass the UI and call Supabase directly.
+- **Admin**: `/admin/inbox` — compose a message to Everyone / Active members
+  only / Lapsed & no-membership members, plus a log of recently sent
+  broadcasts. Also added a "Send a message" box directly on each member's
+  profile (`/admin/users/[id]`) to DM one person.
+- **Members**: `/dashboard/inbox` lists every message, newest first, and
+  marks them read on open. A bell icon next to the account avatar (visible
+  site-wide, not just inside the dashboard) shows an unread count and links
+  straight there.
+- **Automatic reminders**, both delivered by the existing daily cron job
+  (`app/api/cron/membership-expiry`, kept at that path so nothing needs
+  re-configuring in Vercel — it now does more than its name suggests):
+  - **Membership renewal**: same "3 days before it ends" trigger as the
+    existing email, now also drops a matching inbox message.
+  - **Daily class reminder**: every member in a live batch that has a
+    session today gets a message the morning of, using the same session
+    math (`lib/batches.ts`) the dashboard countdown already relies on —
+    skips any date the admin cancelled, and is deduped so re-running the
+    cron the same day can't double-send.
+
+**Still needs your action**: run `supabase/inbox.sql` in the Supabase SQL
+editor, same way as the two pending files from Round 3 — nothing in this
+round works until that table exists.

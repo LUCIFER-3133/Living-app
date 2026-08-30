@@ -253,6 +253,20 @@ export interface BatchRosterEntry {
   membership_active: boolean;
 }
 
+export type InboxCategory = 'admin' | 'class_reminder' | 'membership_renewal' | 'system';
+
+export interface InboxMessage {
+  id: string;
+  user_id: string;
+  sender_id: string | null;
+  category: InboxCategory;
+  title: string;
+  body: string;
+  link: string | null;
+  read_at: string | null;
+  created_at: string;
+}
+
 // Supabase generic Database type, used by the typed client.
 export interface Database {
   public: {
@@ -276,6 +290,7 @@ export interface Database {
       batch_members: { Row: BatchMember; Insert: Partial<BatchMember>; Update: Partial<BatchMember> };
       batch_cancellations: { Row: BatchCancellation; Insert: Partial<BatchCancellation>; Update: Partial<BatchCancellation> };
       testimonials: { Row: Testimonial; Insert: Partial<Testimonial>; Update: Partial<Testimonial> };
+      inbox_messages: { Row: InboxMessage; Insert: Partial<InboxMessage> & { user_id: string; title: string; body: string }; Update: Partial<InboxMessage> };
     };
     Views: {
       batch_roster: { Row: BatchRosterEntry };
