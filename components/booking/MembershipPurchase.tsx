@@ -98,7 +98,7 @@ export default function MembershipPurchase({ plans }: { plans: MembershipPlan[] 
         name: 'Living Yoga',
         description: `${plan.name} membership`,
         prefill: { email: user!.email },
-        theme: { color: '#C1592E' },
+        theme: { color: '#7A3E22' }, // Espresso — matches the 'gold' brand color in tailwind.config.ts
         handler: async (response: any) => {
           const verifyRes = await fetch('/api/memberships/verify', {
             method: 'POST',

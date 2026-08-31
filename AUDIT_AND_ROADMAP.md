@@ -265,3 +265,39 @@ Added a full inbox system:
 **Still needs your action**: run `supabase/inbox.sql` in the Supabase SQL
 editor, same way as the two pending files from Round 3 — nothing in this
 round works until that table exists.
+
+## Round 6 — Brand color swap + real About page + SEO
+
+**Brand colors**: replaced the orange/terracotta accent with your actual
+brand kit (Black `#111111`, White `#F7F5F2`, Beige `#DCCBB8`, Latte
+`#B9935A`, Espresso `#7A3E22`, Olive Green `#6E7046`) in `tailwind.config.ts`.
+Token *names* (gold, moss, stone, ink, canvas) were kept — they're used
+across ~150 files — only their hex values changed, so the whole site
+re-colors from one file. `gold` (buttons/links/CTAs) is now Espresso/Latte
+instead of orange; `moss` (success/active states) is now the brand Olive
+Green; `ink`/`canvas` now match Black/White exactly. Also updated the two
+places a color was hardcoded outside Tailwind: the Razorpay checkout popup's
+theme color, and the Capacitor splash-screen background.
+
+**About page** (`/about`): replaced entirely — the old copy was invented
+placeholder content ("three instructors, founded 2021") describing a studio
+that doesn't exist. It's now your real content about Minal Chopra, restructured
+into the site's existing editorial section style: hero, bio, "My Approach to
+Yoga," "Yoga Beyond the Mat" (with a pull-quote for "consistency does not
+mean perfection"), "My Philosophy," and a closing section with links to
+Membership and Classes. The bio photo is still a placeholder stock image —
+swap it for a real photo of Minal when you have one (marked with a comment
+in the code).
+
+**SEO**: added `Person` structured data for Minal on `/about`, and linked her
+as `founder` in the site-wide Organization schema in the root layout — a
+real, named, certified instructor is a meaningfully stronger trust signal to
+search engines than an anonymous business listing. Tightened the About
+page's meta description to ~154 characters (was 190 — Google truncates
+past ~160). Added a `theme-color` meta tag (brand White/Black, light/dark)
+so the mobile browser address bar and the Capacitor app's status bar area
+match the brand. The rest of the site's SEO fundamentals were already solid
+from earlier work — dynamic `sitemap.xml`/`robots.txt`, per-page canonical
+URLs, Open Graph tags, and title templates — so this round's SEO work
+focused specifically on the new content and its structured data rather than
+rebuilding what already worked.

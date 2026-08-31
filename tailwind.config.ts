@@ -1,8 +1,17 @@
 import type { Config } from 'tailwindcss';
 
 // Design tokens — Living Yoga ("Beyond the mat, into life.")
-// Palette matched to the reference site: dark olive-to-rust hero gradient,
-// warm ivory sections, a near-black footer, and a terracotta/rust accent.
+// Palette is the studio's actual brand kit (Black / White / Beige / Latte /
+// Espresso / Olive Green) — replaces the earlier placeholder terracotta/rust
+// accent. Token NAMES (gold, moss, stone, ink, canvas) are kept as-is since
+// they're used in ~150 files across the app; only the hex values changed, so
+// every existing `text-gold`, `bg-moss`, etc. now renders in brand color
+// without a repo-wide rename:
+//   gold   -> Espresso/Latte family (was a saturated orange-red)
+//   moss   -> Olive Green (was a darker, more black-green olive)
+//   stone  -> Beige
+//   ink    -> Black
+//   canvas -> White / Beige
 // Surfaces (cards, forms, nav) use a glassmorphism treatment — see the
 // .glass-* utilities in globals.css.
 const config: Config = {
@@ -14,40 +23,49 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Olive Green (brand). Used for primary buttons, links, success/
+        // active states — same role it always had, just retinted from a
+        // darker near-black olive to the brand's actual Olive Green.
         moss: {
-          DEFAULT: '#3A4A2E',
-          50: '#EEF1EA',
-          100: '#D7DECB',
-          300: '#8FA07E',
-          500: '#4C5D42',
-          700: '#3A4A2E',
-          900: '#1D2416',
+          DEFAULT: '#6E7046',
+          50: '#EEF0E5',
+          100: '#DBDFC8',
+          300: '#A9AD82',
+          500: '#6E7046',
+          700: '#4E5033',
+          900: '#24261A',
         },
+        // Beige (brand). Muted secondary surface/badge color.
         stone: {
-          DEFAULT: '#B7A88C',
-          50: '#F7F4EE',
-          100: '#EEE7D8',
-          300: '#D7C7A4',
-          500: '#B7A88C',
-          700: '#8F7E60',
+          DEFAULT: '#DCCBB8',
+          50: '#F8F3ED',
+          100: '#EFE4D7',
+          300: '#DCCBB8',
+          500: '#C7AF93',
+          700: '#9C8468',
         },
+        // Espresso/Latte (brand). The site's warm secondary accent — was a
+        // saturated orange-red (#C1592E); now the brand's coffee-brown
+        // family, still dark enough at DEFAULT for white/canvas text on top
+        // (bg-gold buttons) to stay readable.
         gold: {
-          // Terracotta / rust — the reference site's single warm accent.
-          DEFAULT: '#C1592E',
-          50: '#FBEEE7',
-          300: '#DD8D66',
-          500: '#C1592E',
-          700: '#93401E',
+          DEFAULT: '#7A3E22',
+          50: '#F3E7D8',
+          300: '#B9935A',
+          500: '#7A3E22',
+          700: '#5A2E19',
         },
+        // Black (brand).
         ink: {
-          DEFAULT: '#1B1712',
-          700: '#2A241C',
-          500: '#4A4136',
+          DEFAULT: '#111111',
+          700: '#262626',
+          500: '#4D4D4D',
         },
+        // White / Beige (brand).
         canvas: {
-          DEFAULT: '#F3EBDA',
-          dim: '#EAE0C9',
-          card: '#F8F2E4',
+          DEFAULT: '#F7F5F2',
+          dim: '#DCCBB8',
+          card: '#FBF9F6',
         },
       },
       fontFamily: {

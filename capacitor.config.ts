@@ -29,7 +29,7 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       launchShowDuration: 1200,
-      backgroundColor: '#F3EBDA', // matches the 'canvas' color in tailwind.config.ts
+      backgroundColor: '#F7F5F2', // matches the 'canvas' color in tailwind.config.ts (brand White)
       showSpinner: false,
     },
     StatusBar: {

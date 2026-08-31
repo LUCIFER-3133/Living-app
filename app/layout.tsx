@@ -44,6 +44,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  // Colors the browser chrome (mobile Chrome/Safari address bar) and the
+  // Android status bar behind the Capacitor app shell — brand canvas/ink.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F7F5F2' },
+    { media: '(prefers-color-scheme: dark)', color: '#111111' },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -87,6 +93,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       addressCountry: 'IN',
     },
     sameAs: [],
+    // Ties the org to its named, certified teacher for stronger E-E-A-T
+    // signals — a real founder is more credible to both search engines and
+    // people than an anonymous 'HealthAndBeautyBusiness'. Full bio/credentials
+    // are on /about, which has its own Person schema.
+    founder: {
+      '@type': 'Person',
+      name: 'Minal Chopra',
+      jobTitle: 'YCB Level 3 Certified Yoga Teacher',
+      url: `${SITE_URL}/about`,
+    },
   };
 
   return (
