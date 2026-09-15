@@ -34,7 +34,7 @@ export default function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <div className="mt-8 glass-card p-6 text-center">
+      <div className="mt-8 rounded-lg border border-ink/10 bg-white p-6 text-center">
         <CheckCircle2 className="mx-auto text-gold" size={28} />
         <p className="mt-3 font-display text-xl">Check your inbox</p>
         <p className="mt-1 text-sm text-ink/60">

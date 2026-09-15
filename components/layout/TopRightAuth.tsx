@@ -106,7 +106,10 @@ export default function TopRightAuth() {
           <Link href="/login" className="rounded-full px-4 py-2 text-xs font-semibold text-ink transition-colors hover:bg-white/50">
             Log in
           </Link>
-          <Link href="/signup" className="btn-secondary !px-4 !py-2 !text-xs">
+          {/* Black-and-white instead of the site's moss/gold accents — a
+              deliberate monochrome CTA against the light glass nav pill,
+              using the brand's actual Black/White tokens (ink/canvas). */}
+          <Link href="/signup" className="btn-secondary !bg-ink !text-canvas hover:!bg-ink/90 !px-4 !py-2 !text-xs">
             <span>Sign up</span>
           </Link>
         </div>

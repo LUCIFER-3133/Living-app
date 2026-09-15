@@ -30,7 +30,7 @@ const CSP = [
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: https:`,
   `font-src 'self' data:`,
-  `media-src 'self' ${SUPABASE_ORIGIN}`,
+  `media-src 'self' ${SUPABASE_ORIGIN} https://res.cloudinary.com`, // the hero background video is hosted on Cloudinary
   `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} https://api.razorpay.com https://lumberjack.razorpay.com`,
   `frame-src https://api.razorpay.com https://checkout.razorpay.com`,
   "object-src 'none'",

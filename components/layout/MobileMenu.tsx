@@ -15,10 +15,38 @@ const LINKS = [
   { href: '/contact', label: 'Contact' },
 ];
 
+// Staggers the links in one after another rather than the whole list
+// fading in as a single block — each one eases up into place a beat after
+// the last, so opening the menu reads as a small sequence rather than a
+// flat pop. Framer's own stagger orchestration (staggerChildren /
+// delayChildren on the parent) drives the timing; each link just declares
+// its own hidden/show state.
+const listVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.045, delayChildren: 0.08 },
+  },
+};
+
+const linkVariants = {
+  hidden: { opacity: 0, y: 10 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
 // A compact dropdown panel anchored just above the floating nav pill —
 // replaces the previous full-screen photo takeover, which felt heavy for
 // what is just a short list of links. Clicking the dimmed backdrop (not a
 // blurred photo) closes it, same as any standard dropdown.
+//
+// Solid opaque canvas panel (not the site's usual frosted glass) with
+// centered, uppercase, letter-spaced links — reads as its own dedicated
+// menu surface rather than a see-through overlay on the page behind it.
+// Sized with headroom (wider than the link list currently needs) so more
+// items or a secondary column can be added later without a resize pass.
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   return (
     <>
@@ -36,20 +64,26 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 12, scale: 0.97 }}
         transition={{ duration: 0.22, ease: [0.65, 0, 0.35, 1] }}
-        className="glass-card fixed inset-x-4 bottom-24 z-[95] mx-auto max-w-md overflow-hidden sm:w-80"
+        className="fixed inset-x-4 bottom-24 z-[95] mx-auto max-w-[52rem] overflow-hidden rounded-lg border border-ink/10 bg-canvas shadow-2xl sm:w-[42rem]"
       >
-        <nav className="max-h-[60vh] overflow-y-auto py-2">
+        <motion.nav
+          variants={listVariants}
+          initial="hidden"
+          animate="show"
+          className="max-h-[66vh] overflow-y-auto py-6"
+        >
           {LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className="block px-6 py-3 text-base font-medium text-ink transition-colors hover:bg-ink/5 hover:text-gold"
-            >
-              {link.label}
-            </Link>
+            <motion.div key={link.href} variants={linkVariants}>
+              <Link
+                href={link.href}
+                onClick={onClose}
+                className="block py-4 text-center text-base font-semibold uppercase tracking-[0.14em] text-ink transition-colors hover:text-gold"
+              >
+                {link.label}
+              </Link>
+            </motion.div>
           ))}
-        </nav>
+        </motion.nav>
 
         <div className="flex items-center justify-between border-t border-ink/10 px-6 py-4">
           <Link href="/contact" onClick={onClose} className="btn-outline !px-4 !py-2 !text-xs">

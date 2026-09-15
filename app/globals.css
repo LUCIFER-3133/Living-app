@@ -137,9 +137,33 @@
   }
 
   /* Reference site's dark hero / CTA gradient: dark olive top-left
-     bleeding into a warm rust-brown bottom-right. */
+     bleeding into a warm rust-brown bottom-right. Also used as the hero
+     section's background-color, so it's what shows for the instant before
+     the background video paints (and if it never loads at all). */
   .hero-gradient {
     background: radial-gradient(120% 140% at 8% 0%, #232819 0%, #2c2416 38%, #4a2a1c 68%, #7a3f22 100%);
+  }
+
+  /* Darkens for legibility without tinting — black/gray only, no hue, so
+     the video's own colors stay true. Strongest over the text (left side,
+     fading down the left edge for the bottom nav pill) and clear on the
+     right so most of the footage still shows through unaltered. */
+  .hero-video-overlay {
+    background: linear-gradient(
+      100deg,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.4) 32%,
+      rgba(0, 0, 0, 0.12) 58%,
+      rgba(0, 0, 0, 0) 78%
+    ),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 30%);
+  }
+
+  /* Belt-and-suspenders with the gradient above — a shadow on the
+     letterforms themselves holds up even over the lighter, right-hand
+     side of the gradient where a frame occasionally still runs light. */
+  .hero-text-shadow {
+    text-shadow: 0 2px 16px rgba(17, 17, 17, 0.55), 0 1px 3px rgba(17, 17, 17, 0.7);
   }
 
   /* Giant ghost/outline wordmark used in the footer background. */

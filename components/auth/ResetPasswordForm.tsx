@@ -52,7 +52,7 @@ export default function ResetPasswordForm() {
 
   if (hasSession === false) {
     return (
-      <div className="mt-8 glass-card p-6 text-center text-sm text-ink/60">
+      <div className="mt-8 rounded-lg border border-ink/10 bg-white p-6 text-center text-sm text-ink/60">
         This reset link is invalid or has expired.{' '}
         <a href="/forgot-password" className="link-underline text-moss">Request a new one</a>.
       </div>

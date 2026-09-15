@@ -29,7 +29,11 @@ export default function BottomNav() {
         style={{ bottom: "max(1.25rem, calc(env(safe-area-inset-bottom) + 0.5rem))" }}
       >
         <div className="glass-panel-dark flex w-full max-w-md items-center justify-between gap-3 rounded-full py-2 pl-2 pr-2.5 text-canvas">
-          <Link href="/contact" className="btn-primary !px-4 !py-2.5 !text-xs">
+          {/* Black-and-white instead of the site's moss/gold accents —
+              black button, white text, same treatment as Sign up below.
+              Border + shadow (from .btn-primary) still separate it from the
+              dark glass pill it sits on even though both are near-black. */}
+          <Link href="/contact" className="btn-primary !bg-ink !text-canvas hover:!bg-ink/90 !px-4 !py-2.5 !text-xs">
             <span>Book a demo</span>
           </Link>
           {/* text-canvas isn't decoration here — the mark is masked

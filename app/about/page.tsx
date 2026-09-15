@@ -43,21 +43,42 @@ export default function AboutPage() {
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
 
-      {/* ── Hero ── */}
-      <div className="container-editorial py-20 md:py-28">
-        <ScrollReveal>
-          <p className="eyebrow">Meet your teacher</p>
-          <h1 className="mt-4 max-w-2xl text-display-lg">
-            Meet <span className="accent-italic">Minal.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink/70">
-            Yoga as a practice of awareness, strength, balance and transformation.
-          </p>
-        </ScrollReveal>
-      </div>
+      {/* ── Hero ──
+          Same video-hero treatment as the homepage and /classes: full-bleed
+          clip, grayscale gradient overlay (no color tint) + text-shadow for
+          legibility, content absolutely centered so it holds regardless of
+          how the section's own height is set. */}
+      <section className="relative min-h-screen w-full overflow-hidden">
+        <video
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          src="https://res.cloudinary.com/daflkt8ob/video/upload/v1789411702/4_fetk06.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        <div className="hero-video-overlay absolute inset-0 z-10" aria-hidden="true" />
+        <div className="absolute inset-0 z-20 flex items-center">
+          <div className="container-editorial">
+            <ScrollReveal>
+              <div className="hero-text-shadow">
+                <p className="eyebrow">Meet your teacher</p>
+                <h1 className="mt-4 max-w-2xl text-display-lg text-canvas">
+                  Meet <span className="accent-italic">Minal.</span>
+                </h1>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-canvas/85">
+                  Yoga as a practice of awareness, strength, balance and transformation.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
 
       {/* ── Bio ── */}
-      <div className="container-editorial grid gap-14 pb-24 md:grid-cols-2 md:pb-32">
+      <div className="container-editorial grid gap-14 pt-20 pb-24 md:grid-cols-2 md:pt-28 md:pb-32">
         <ScrollReveal className="relative aspect-[4/5] overflow-hidden rounded-lg">
           {/* Placeholder — swap for a real photo of Minal teaching or in
               practice once you have one to hand over. */}

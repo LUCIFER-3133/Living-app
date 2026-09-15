@@ -113,7 +113,7 @@ export default function InquiryPopup() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
             transition={{ duration: 0.3, ease: [0.65, 0, 0.35, 1] }}
-            className="glass-card relative w-full max-w-md p-7"
+            className="relative w-full max-w-md rounded-lg border border-ink/10 bg-canvas p-7 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
