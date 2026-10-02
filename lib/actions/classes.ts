@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireAdminAction as requireAdmin } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import type { Difficulty } from '@/types/database';
 
 /** Postgres unique-constraint violation, surfaced through PostgREST. */
 const UNIQUE_VIOLATION = '23505';
@@ -29,7 +30,7 @@ export async function saveClass(formData: FormData) {
     long_description: (formData.get('long_description') as string) || null,
     image_url: (formData.get('image_url') as string) || null,
     duration_minutes: Number(formData.get('duration_minutes')),
-    difficulty: formData.get('difficulty') as string,
+    difficulty: formData.get('difficulty') as Difficulty,
     price: Number(formData.get('price')),
     is_active: formData.get('is_active') === 'on',
   };

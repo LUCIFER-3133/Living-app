@@ -86,7 +86,7 @@ create table if not exists public.batches (
   start_time time not null,
   end_time time not null,
 
-  capacity int not null default 20,
+  capacity int not null default 15,
   -- Shown publicly on the /classes timetable AND on the member's dashboard
   -- card. Nothing private belongs here — use
   -- batch_meeting_credentials.host_note for admin-only notes.
@@ -101,7 +101,7 @@ create table if not exists public.batches (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
-  constraint chk_batches_capacity check (capacity > 0)
+  constraint chk_batches_capacity check (capacity > 0 and capacity <= 15)
 );
 
 -- Weekday validity lives here rather than inline, because `create table if not
@@ -116,6 +116,25 @@ alter table public.batches drop constraint if exists chk_batches_weekdays;
 alter table public.batches add constraint chk_batches_weekdays check (
   weekdays <@ array[0,1,2,3,4,5,6]::smallint[] and cardinality(weekdays) >= 1
 );
+
+-- Studio policy: 15 students max per batch. The inline constraint above only
+-- reaches a freshly created table (`create table if not exists` skips an
+-- existing one), so it's restated here as an ALTER, same pattern as the
+-- weekday constraint immediately above, to reach databases created before
+-- this cap existed.
+--
+-- Existing batches created under the old default (20) would violate the new
+-- <= 15 constraint before it's even added, so clamp them down first. This
+-- silently caps any oversized batch to 15 -- if a real batch actually has
+-- more than 15 members already assigned, that's a data situation the admin
+-- needs to look at directly (move some members to a second batch), not
+-- something a migration can safely decide on its own.
+update public.batches set capacity = 15 where capacity > 15;
+alter table public.batches drop constraint if exists chk_batches_capacity;
+alter table public.batches add constraint chk_batches_capacity check (
+  capacity > 0 and capacity <= 15
+);
+
 
 create index if not exists idx_batches_status on public.batches(status);
 create index if not exists idx_batches_class on public.batches(class_id);

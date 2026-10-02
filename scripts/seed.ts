@@ -81,7 +81,7 @@ function generateRecurringSchedules(classes: { id: string; duration_minutes: num
         start_time: start.toISOString(),
         end_time: end.toISOString(),
         location: slotIndex % 3 === 0 ? 'online' : 'studio',
-        capacity: 12,
+        capacity: 15,
       });
     });
   }

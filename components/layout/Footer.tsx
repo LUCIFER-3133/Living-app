@@ -48,7 +48,7 @@ export default function Footer() {
               Live online yoga classes for every body, every schedule, anywhere in the world.
             </p>
             <div className="mt-6 flex gap-3">
-              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-canvas/20 text-canvas/70 hover:text-canvas">IG</a>
+              <a href="https://www.instagram.com/yogawithlivingyoga" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-canvas/20 text-canvas/70 hover:text-canvas">IG</a>
               <a href="#" aria-label="YouTube" className="flex h-9 w-9 items-center justify-center rounded-full border border-canvas/20 text-canvas/70 hover:text-canvas">YT</a>
               <a href="https://wa.me/917984925843" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex h-9 w-9 items-center justify-center rounded-full border border-canvas/20 text-canvas/70 hover:text-canvas">WA</a>
             </div>

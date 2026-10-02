@@ -14,6 +14,8 @@ const NOTICES: Record<string, { text: string; tone: 'moss' | 'gold' }> = {
   extended: { text: 'Membership extended.', tone: 'moss' },
   cancelled: { text: 'Membership cancelled.', tone: 'moss' },
   role_updated: { text: 'Role updated.', tone: 'moss' },
+  cannot_self_demote: { text: "You can't remove your own admin access.", tone: 'gold' },
+  last_admin: { text: 'This is the only remaining admin account, so it can\'t be demoted.', tone: 'gold' },
   grant_failed: { text: 'Could not grant membership — check the server logs.', tone: 'gold' },
   extend_failed: { text: 'Could not extend membership — check the server logs.', tone: 'gold' },
   cancel_failed: { text: 'Could not cancel membership — check the server logs.', tone: 'gold' },
@@ -32,7 +34,7 @@ export default async function AdminUserDetailPage({
 }) {
   const { id } = await params;
   const { notice } = await searchParams;
-  await requireAdminPage();
+  const currentAdminId = await requireAdminPage();
   const admin = createAdminClient();
 
   const [{ data: profile }, { data: authUser }, { data: memberships }, { data: payments }, { data: plans }, { data: bookings }] =
@@ -86,14 +88,20 @@ export default async function AdminUserDetailPage({
           <p className="mt-0.5 text-sm text-ink/50">{profile.phone || 'No phone on file'} · Joined {formatDate(profile.created_at)}</p>
         </div>
 
-        <form action={setUserRole}>
-          <input type="hidden" name="user_id" value={id} />
-          <input type="hidden" name="role" value={profile.role === 'admin' ? 'user' : 'admin'} />
-          <button type="submit" className="btn-outline !px-4 !py-2 !text-xs">
-            {profile.role === 'admin' ? <ShieldOff size={14} /> : <ShieldCheck size={14} />}
-            <span>{profile.role === 'admin' ? 'Remove admin access' : 'Make admin'}</span>
-          </button>
-        </form>
+        {profile.role === 'admin' && id === currentAdminId ? (
+          <p className="text-xs text-ink/45" title="You can't remove your own admin access from here.">
+            This is your own account — admin access can&apos;t be removed from here.
+          </p>
+        ) : (
+          <form action={setUserRole}>
+            <input type="hidden" name="user_id" value={id} />
+            <input type="hidden" name="role" value={profile.role === 'admin' ? 'user' : 'admin'} />
+            <button type="submit" className="btn-outline !px-4 !py-2 !text-xs">
+              {profile.role === 'admin' ? <ShieldOff size={14} /> : <ShieldCheck size={14} />}
+              <span>{profile.role === 'admin' ? 'Remove admin access' : 'Make admin'}</span>
+            </button>
+          </form>
+        )}
       </div>
 
       {/* ── Send a message ── */}

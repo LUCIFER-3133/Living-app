@@ -60,6 +60,9 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: '**.supabase.co' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      // Blog post featured images (set from /admin/blog) commonly point at
+      // Cloudinary, same host the hero background videos already load from.
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
     formats: ['image/avif', 'image/webp'],
   },
@@ -70,7 +73,6 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
   },
   compress: true,
-  eslint: { ignoreDuringBuilds: false },
 };
 
 export default nextConfig;

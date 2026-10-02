@@ -111,7 +111,7 @@ create table if not exists public.class_schedules (
   start_time timestamptz not null,
   end_time timestamptz not null,
   location text not null default 'studio' check (location in ('studio', 'online')),
-  capacity int not null default 12,
+  capacity int not null default 15,
   booked_count int not null default 0,
   is_cancelled boolean not null default false,
   created_at timestamptz not null default now(),

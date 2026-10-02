@@ -268,32 +268,63 @@ export interface InboxMessage {
 }
 
 // Supabase generic Database type, used by the typed client.
+//
+// `Relationships` on every table/view, and the top-level `Functions` map,
+// are required by @supabase/supabase-js's `GenericSchema` constraint (added
+// in the v2 typings this project upgraded to) — without them TypeScript
+// can't confirm `public` satisfies `GenericSchema`, and every `.from(...)`
+// call silently resolves to `never`. We don't track real foreign-key
+// relationship metadata here (this file is hand-authored, not generated),
+// so every table gets an empty `Relationships: []`; that's enough to
+// satisfy the type without changing any runtime behavior.
+//
+// `Rec<T>` intersects a plain interface with `Record<string, unknown>`.
+// supabase-js's `GenericTable`/`GenericView` require `Row`/`Insert`/`Update`
+// to satisfy `Record<string, unknown>` (an index signature), and a plain
+// TypeScript `interface` never structurally satisfies that on its own
+// ("Index signature for type 'string' is missing") even though every
+// property it has is perfectly compatible — this intersection adds the
+// index signature the constraint wants without changing any property's
+// actual type or any runtime behavior.
+type Rec<T> = T & Record<string, unknown>;
+
 export interface Database {
   public: {
     Tables: {
-      profiles: { Row: Profile; Insert: Partial<Profile> & { id: string }; Update: Partial<Profile> };
-      classes: { Row: YogaClass; Insert: Partial<YogaClass>; Update: Partial<YogaClass> };
-      class_schedules: { Row: ClassSchedule; Insert: Partial<ClassSchedule>; Update: Partial<ClassSchedule> };
-      bookings: { Row: Booking; Insert: Partial<Booking>; Update: Partial<Booking> };
-      appointments: { Row: Appointment; Insert: Partial<Appointment>; Update: Partial<Appointment> };
-      membership_plans: { Row: MembershipPlan; Insert: Partial<MembershipPlan>; Update: Partial<MembershipPlan> };
-      memberships: { Row: Membership; Insert: Partial<Membership>; Update: Partial<Membership> };
-      payments: { Row: Payment; Insert: Partial<Payment>; Update: Partial<Payment> };
-      blog_posts: { Row: BlogPost; Insert: Partial<BlogPost>; Update: Partial<BlogPost> };
-      demo_videos: { Row: DemoVideo; Insert: Partial<DemoVideo>; Update: Partial<DemoVideo> };
-      batches: { Row: Batch; Insert: Partial<Batch>; Update: Partial<Batch> };
+      profiles: { Row: Rec<Profile>; Insert: Rec<Partial<Profile> & { id: string }>; Update: Rec<Partial<Profile>>; Relationships: [] };
+      classes: { Row: Rec<YogaClass>; Insert: Rec<Partial<YogaClass>>; Update: Rec<Partial<YogaClass>>; Relationships: [] };
+      class_schedules: { Row: Rec<ClassSchedule>; Insert: Rec<Partial<ClassSchedule>>; Update: Rec<Partial<ClassSchedule>>; Relationships: [{ foreignKeyName: 'class_schedules_class_id_fkey'; columns: ['class_id']; isOneToOne: false; referencedRelation: 'classes'; referencedColumns: ['id'] }] };
+      bookings: { Row: Rec<Booking>; Insert: Rec<Partial<Booking>>; Update: Rec<Partial<Booking>>; Relationships: [{ foreignKeyName: 'bookings_user_id_fkey'; columns: ['user_id']; isOneToOne: false; referencedRelation: 'profiles'; referencedColumns: ['id'] }, { foreignKeyName: 'bookings_schedule_id_fkey'; columns: ['schedule_id']; isOneToOne: false; referencedRelation: 'class_schedules'; referencedColumns: ['id'] }] };
+      appointments: { Row: Rec<Appointment>; Insert: Rec<Partial<Appointment>>; Update: Rec<Partial<Appointment>>; Relationships: [] };
+      membership_plans: { Row: Rec<MembershipPlan>; Insert: Rec<Partial<MembershipPlan>>; Update: Rec<Partial<MembershipPlan>>; Relationships: [] };
+      memberships: { Row: Rec<Membership>; Insert: Rec<Partial<Membership>>; Update: Rec<Partial<Membership>>; Relationships: [{ foreignKeyName: 'memberships_user_id_fkey'; columns: ['user_id']; isOneToOne: false; referencedRelation: 'profiles'; referencedColumns: ['id'] }, { foreignKeyName: 'memberships_plan_id_fkey'; columns: ['plan_id']; isOneToOne: false; referencedRelation: 'membership_plans'; referencedColumns: ['id'] }] };
+      payments: { Row: Rec<Payment>; Insert: Rec<Partial<Payment>>; Update: Rec<Partial<Payment>>; Relationships: [{ foreignKeyName: 'payments_user_id_fkey'; columns: ['user_id']; isOneToOne: false; referencedRelation: 'profiles'; referencedColumns: ['id'] }] };
+      blog_posts: { Row: Rec<BlogPost>; Insert: Rec<Partial<BlogPost>>; Update: Rec<Partial<BlogPost>>; Relationships: [] };
+      demo_videos: { Row: Rec<DemoVideo>; Insert: Rec<Partial<DemoVideo>>; Update: Rec<Partial<DemoVideo>>; Relationships: [] };
+      batches: { Row: Rec<Batch>; Insert: Rec<Partial<Batch>>; Update: Rec<Partial<Batch>>; Relationships: [{ foreignKeyName: 'batches_class_id_fkey'; columns: ['class_id']; isOneToOne: false; referencedRelation: 'classes'; referencedColumns: ['id'] }] };
       batch_meeting_credentials: {
-        Row: BatchMeetingCredentials;
-        Insert: Partial<BatchMeetingCredentials> & { batch_id: string };
-        Update: Partial<BatchMeetingCredentials>;
+        Row: Rec<BatchMeetingCredentials>;
+        Insert: Rec<Partial<BatchMeetingCredentials> & { batch_id: string }>;
+        Update: Rec<Partial<BatchMeetingCredentials>>;
+        Relationships: [];
       };
-      batch_members: { Row: BatchMember; Insert: Partial<BatchMember>; Update: Partial<BatchMember> };
-      batch_cancellations: { Row: BatchCancellation; Insert: Partial<BatchCancellation>; Update: Partial<BatchCancellation> };
-      testimonials: { Row: Testimonial; Insert: Partial<Testimonial>; Update: Partial<Testimonial> };
-      inbox_messages: { Row: InboxMessage; Insert: Partial<InboxMessage> & { user_id: string; title: string; body: string }; Update: Partial<InboxMessage> };
+      batch_members: { Row: Rec<BatchMember>; Insert: Rec<Partial<BatchMember>>; Update: Rec<Partial<BatchMember>>; Relationships: [] };
+      batch_cancellations: { Row: Rec<BatchCancellation>; Insert: Rec<Partial<BatchCancellation>>; Update: Rec<Partial<BatchCancellation>>; Relationships: [] };
+      testimonials: { Row: Rec<Testimonial>; Insert: Rec<Partial<Testimonial>>; Update: Rec<Partial<Testimonial>>; Relationships: [] };
+      inbox_messages: { Row: Rec<InboxMessage>; Insert: Rec<Partial<InboxMessage> & { user_id: string; title: string; body: string }>; Update: Rec<Partial<InboxMessage>>; Relationships: [] };
     };
     Views: {
-      batch_roster: { Row: BatchRosterEntry };
+      batch_roster: { Row: Rec<BatchRosterEntry>; Relationships: [] };
+    };
+    Functions: {
+      check_rate_limit: {
+        Args: { p_key: string; p_max: number; p_window_seconds: number };
+        Returns: boolean;
+      };
+      cleanup_rate_limits: {
+        Args: Record<string, never>;
+        Returns: unknown;
+      };
     };
   };
 }

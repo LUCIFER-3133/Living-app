@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 const SERVICES = [
   {
     title: 'Live Classes',
-    copy: 'Hatha, Vinyasa & Ashtanga flows across the day, taught live in small batches capped at 12 students — so instructors can actually correct your form in real time.',
-    points: ['20+ weekly slots across styles', 'Small batches, capped at 12', 'Recordings available for 7 days'],
+    copy: 'Hatha, Vinyasa & Ashtanga flows across the day, taught live in small batches capped at 15 students — so instructors can actually correct your form in real time.',
+    points: ['20+ weekly slots across styles', 'Small batches, capped at 15', 'Recordings available for 7 days'],
     image: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=1100&auto=format&fit=crop',
     cta: 'See class timings',
     href: '/classes',

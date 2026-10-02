@@ -48,10 +48,15 @@ export default function AboutPage() {
           clip, grayscale gradient overlay (no color tint) + text-shadow for
           legibility, content absolutely centered so it holds regardless of
           how the section's own height is set. */}
-      <section className="relative min-h-screen w-full overflow-hidden">
+      <section className="relative min-h-dvh w-full overflow-hidden">
         <video
           className="absolute inset-0 z-0 h-full w-full object-cover"
-          src="https://res.cloudinary.com/daflkt8ob/video/upload/v1789411702/4_fetk06.mp4"
+          // f_auto,q_auto = Cloudinary auto-compression; poster is the
+          // first frame as a still image so there's something to paint
+          // immediately instead of a blank flash while the video loads
+          // (see components/home/Hero.tsx for the full rationale).
+          poster="https://res.cloudinary.com/daflkt8ob/video/upload/f_auto,q_auto,so_0/v1789411702/4_fetk06.jpg"
+          src="https://res.cloudinary.com/daflkt8ob/video/upload/f_auto,q_auto/v1789411702/4_fetk06.mp4"
           autoPlay
           muted
           loop

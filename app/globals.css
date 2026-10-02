@@ -11,6 +11,12 @@
     font-weight: 400;
     letter-spacing: 0.01em;
     line-height: 1.65;
+    /* Defensive guard against accidental horizontal scroll on mobile —
+       decorative absolutely-positioned elements (hero watermark text,
+       marquees) are already clipped by their own overflow-hidden
+       containers, but this is cheap insurance against the page itself
+       ever gaining a sideways scrollbar. */
+    overflow-x: hidden;
   }
 
   /* Headings are the airy display serif, in MIXED CASE.
@@ -120,9 +126,13 @@
       transition-all duration-300 hover:bg-white/65;
   }
 
+  /* text-base (16px) on mobile, not text-sm (14px) — anything smaller than
+     16px makes iOS Safari auto-zoom the whole page on focus, which is a
+     jarring, well-known mobile form bug. Reverts to the original 14px from
+     sm: up, where that zoom behavior doesn'''t apply. */
   .input-field {
-    @apply mt-1.5 w-full rounded-lg glass-panel bg-white/55 px-4 py-2.5 text-sm text-ink
-      placeholder:text-ink/35 transition-colors focus:border-moss/50 focus:outline-none;
+    @apply mt-1.5 w-full rounded-lg glass-panel bg-white/55 px-4 py-3 text-base text-ink
+      placeholder:text-ink/35 transition-colors focus:border-moss/50 focus:outline-none sm:py-2.5 sm:text-sm;
   }
 
   .link-underline {

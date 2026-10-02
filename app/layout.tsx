@@ -4,7 +4,11 @@ import './globals.css';
 import BottomNav from '@/components/layout/BottomNav';
 import TopRightAuth from '@/components/layout/TopRightAuth';
 import Footer from '@/components/layout/Footer';
-import LoadingScreen from '@/components/ui/LoadingScreen';
+// LoadingScreen intentionally not rendered -- it blocked every first
+// page view each session behind a ~1.35s fake progress animation for a
+// branding flourish, which fights directly against "make the site fast".
+// The component still exists (components/ui/LoadingScreen.tsx) if you want
+// the branded intro back despite the delay -- just re-add <LoadingScreen />.
 import FloatingWidgets from '@/components/layout/FloatingWidgets';
 import InquiryPopup from '@/components/marketing/InquiryPopup';
 import CapacitorBridge from '@/components/mobile/CapacitorBridge';
@@ -92,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       addressRegion: 'Gujarat',
       addressCountry: 'IN',
     },
-    sameAs: [],
+    sameAs: ['https://www.instagram.com/yogawithlivingyoga'],
     // Ties the org to its named, certified teacher for stronger E-E-A-T
     // signals — a real founder is more credible to both search engines and
     // people than an anonymous 'HealthAndBeautyBusiness'. Full bio/credentials
@@ -113,7 +117,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
-        <LoadingScreen />
         <CapacitorBridge />
         <a
           href="#main-content"

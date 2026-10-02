@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const phone = process.env.NEXT_PUBLIC_STUDIO_PHONE || '+91 79849 25843';
+
   return (
     <div className="container-editorial py-20 md:py-28">
       <ScrollReveal>
@@ -30,7 +32,7 @@ export default function ContactPage() {
           </div>
           <div className="flex items-start gap-3">
             <Phone size={18} className="mt-0.5 text-moss" />
-            <span className="text-sm text-ink/70">+91 00000 00000</span>
+            <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="text-sm text-ink/70 hover:text-ink">{phone}</a>
           </div>
         </ScrollReveal>
 

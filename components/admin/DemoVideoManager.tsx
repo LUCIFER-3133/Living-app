@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Loader2, Trash2, UploadCloud, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { formatDate, slugify } from '@/lib/utils';
+import { deleteDemoVideo, toggleDemoVideoPublished } from '@/lib/actions/demoVideos';
 import type { DemoVideo } from '@/types/database';
 
 const CATEGORIES = ['Hatha', 'Vinyasa', 'Ashtanga', 'Prenatal', 'Power Yoga', 'Meditation', 'Pranayama', 'General'];
@@ -82,14 +83,25 @@ export default function DemoVideoManager({ initialVideos }: { initialVideos: Dem
   }
 
   async function togglePublish(v: DemoVideo) {
-    const { data } = await supabase.from('demo_videos').update({ is_published: !v.is_published }).eq('id', v.id).select().single();
-    if (data) setVideos((prev) => prev.map((x) => (x.id === v.id ? (data as DemoVideo) : x)));
+    const nextPublished = !v.is_published;
+    try {
+      await toggleDemoVideoPublished(v.id, nextPublished);
+      setVideos((prev) => prev.map((x) => (x.id === v.id ? { ...x, is_published: nextPublished } : x)));
+    } catch (err: any) {
+      setError(err.message || 'Could not update the video.');
+    }
   }
 
   async function remove(v: DemoVideo) {
-    if (!confirm(`Delete "${v.title}"? This cannot be undone.`)) return;
-    await supabase.from('demo_videos').delete().eq('id', v.id);
-    setVideos((prev) => prev.filter((x) => x.id !== v.id));
+    if (!confirm(`Delete "${v.title}"? This removes it — and its uploaded video/thumbnail files — permanently.`)) return;
+    try {
+      // Server action, not a client-side delete: it also removes the actual
+      // video/thumbnail files from storage, not just this row.
+      await deleteDemoVideo(v.id);
+      setVideos((prev) => prev.filter((x) => x.id !== v.id));
+    } catch (err: any) {
+      setError(err.message || 'Could not delete the video.');
+    }
   }
 
   return (

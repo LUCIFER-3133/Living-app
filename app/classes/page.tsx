@@ -43,40 +43,21 @@ export default async function ClassesPage() {
 
   return (
     <div>
-      {/* Video hero, same treatment as the homepage: grayscale gradient
-          overlay + text-shadow so the clip's own colors stay true while the
-          heading and standfirst stay legible over it. */}
-      <section className="relative min-h-screen w-full overflow-hidden">
-        <video
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          src="https://res.cloudinary.com/daflkt8ob/video/upload/v1789409498/3_jdbjva.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-        />
-        <div className="hero-video-overlay absolute inset-0 z-10" aria-hidden="true" />
-        <div className="absolute inset-0 z-20 flex items-center">
-          <div className="container-editorial">
-          <ScrollReveal>
-            <div className="hero-text-shadow">
-              <p className="eyebrow">Weekly schedule</p>
-              <h1 className="mt-4 max-w-2xl text-display-lg text-canvas">
-                Find a rhythm that <span className="accent-italic">fits</span> your week.
-              </h1>
-              <p className="lede mt-5 max-w-xl !text-canvas/85">
-                All times shown are IST. Every batch below is included with an active membership —
-                no per-class fees, ever.
-              </p>
-            </div>
-          </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
+      {/* Plain text hero — no background video here (see classes page). */}
       <div className="container-editorial py-20 md:py-28">
+        <ScrollReveal>
+          <p className="eyebrow">Weekly schedule</p>
+          <h1 className="mt-4 max-w-2xl text-display-lg">
+            Find a rhythm that <span className="accent-italic">fits</span> your week.
+          </h1>
+          <p className="lede mt-5 max-w-xl">
+            All times shown are IST. Every batch below is included with an active membership —
+            no per-class fees, ever.
+          </p>
+        </ScrollReveal>
+      </div>
+
+      <div className="container-editorial pb-20 md:pb-28">
         {/* How access actually works — set expectations before the timetable,
             since there is no "book" button to discover. */}
         <ScrollReveal className="mt-10 glass-card p-7">

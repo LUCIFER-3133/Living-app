@@ -22,7 +22,14 @@ export default function Hero() {
           (below) — no color tint, so the footage's own colors stay true. */}
       <video
         className="absolute inset-0 z-0 h-full w-full object-cover"
-        src="https://res.cloudinary.com/daflkt8ob/video/upload/v1789389372/1_1_egi11m.mp4"
+        // f_auto,q_auto lets Cloudinary pick the smallest codec/bitrate the
+        // viewer's browser supports instead of serving the raw upload --
+        // typically 60-80% less data for a background clip that's playing
+        // silently and small on screen anyway. The matching poster frame
+        // (so_0 = the first frame, as a .jpg) paints instantly so there's
+        // a real image instead of a blank flash while the video buffers.
+        poster="https://res.cloudinary.com/daflkt8ob/video/upload/f_auto,q_auto,so_0/v1789389372/1_1_egi11m.jpg"
+        src="https://res.cloudinary.com/daflkt8ob/video/upload/f_auto,q_auto/v1789389372/1_1_egi11m.mp4"
         autoPlay
         muted
         loop
@@ -80,7 +87,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.55 }}
             className="mt-6 max-w-sm text-base leading-relaxed text-canvas/85"
           >
-            Practice with a YBC Level 3 Certified &amp; Intermediate-Level Aerial Yoga
+            Practice with a YCB Level 3 Certified &amp; Intermediate-Level Aerial Yoga
             Teacher, online from anywhere or in person in Ahmedabad — your practice,
             your pace.
           </motion.p>

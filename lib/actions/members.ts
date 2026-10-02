@@ -122,14 +122,41 @@ export async function cancelMembership(formData: FormData) {
   redirect(`/admin/users/${userId}?notice=${notice}`);
 }
 
-/** Promote/demote a user's role. Guarded server-side same as every other admin mutation. */
+/**
+ * Promote/demote a user's role. Guarded server-side same as every other
+ * admin mutation, plus two safeguards specific to this one mutation because
+ * of what it can lock you out of:
+ *
+ *  - An admin can't remove their own admin access. Nothing else in the app
+ *    can undo that from inside /admin once it happens — the button would
+ *    otherwise be a working "lock myself out" switch on every admin's own
+ *    user page.
+ *  - The last remaining admin can't be demoted by anyone, for the same
+ *    reason: it would leave the whole /admin section unreachable, with no
+ *    admin account left to reverse it, short of editing the database
+ *    directly.
+ */
 export async function setUserRole(formData: FormData) {
-  await requireAdmin();
+  const actingAdminId = await requireAdmin();
   const admin = createAdminClient();
 
   const userId = formData.get('user_id') as string;
   const role = formData.get('role') as string;
   if (!userId || (role !== 'user' && role !== 'admin')) redirect(`/admin/users/${userId}?notice=role_failed`);
+
+  if (role === 'user') {
+    if (userId === actingAdminId) {
+      redirect(`/admin/users/${userId}?notice=cannot_self_demote`);
+    }
+
+    const { count: adminCount } = await admin
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'admin');
+    if ((adminCount ?? 0) <= 1) {
+      redirect(`/admin/users/${userId}?notice=last_admin`);
+    }
+  }
 
   const { error } = await admin.from('profiles').update({ role }).eq('id', userId);
 

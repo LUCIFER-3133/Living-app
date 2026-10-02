@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireAdminAction as requireAdmin } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import type { BillingInterval } from '@/types/database';
 
 /** Postgres unique-constraint violation, surfaced through PostgREST. */
 const UNIQUE_VIOLATION = '23505';
@@ -27,9 +28,9 @@ export async function savePlan(formData: FormData) {
     slug: slugify(name),
     description: (formData.get('description') as string) || null,
     price: Number(formData.get('price')),
-    billing_interval: formData.get('billing_interval') as string,
+    billing_interval: formData.get('billing_interval') as BillingInterval,
     features: featuresRaw.split('\n').map((f) => f.trim()).filter(Boolean),
-    status: formData.get('status') as string,
+    status: formData.get('status') as 'active' | 'inactive',
   };
 
   // `slug` is unique and recomputed from `name` on every save, so renaming a

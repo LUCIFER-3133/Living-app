@@ -4,7 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 const BENEFITS = [
   { icon: Video, n: '01', title: 'Live, not pre-recorded', copy: 'Real-time correction and eye contact — the studio feeling, on your screen.' },
   { icon: Clock, n: '02', title: 'Timings for every shift', copy: 'Early morning, lunch break, or evening — 20+ weekly slots.' },
-  { icon: Users, n: '03', title: 'Small batches, always', copy: 'Capped at 12 students per class so instructor can actually see you.' },
+  { icon: Users, n: '03', title: 'Small batches, always', copy: 'Capped at 15 students per class so instructor can actually see you.' },
   { icon: Layers, n: '04', title: 'All levels welcome', copy: 'From first Downward Dog to advanced arm balances — a track for every body.' },
 ];
 

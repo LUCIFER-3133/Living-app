@@ -6,7 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireAdminAction as requireAdmin } from '@/lib/auth';
 import { formatStudioTime, formatWeekdays } from '@/lib/batches';
 import { sendBatchAssignmentEmail } from '@/lib/email/send';
-import type { Weekday } from '@/types/database';
+import type { BatchStatus, MeetingProvider, Weekday } from '@/types/database';
 
 /** Revalidate everywhere a batch is visible. */
 function revalidateBatch(batchId?: string) {
@@ -65,11 +65,11 @@ export async function saveBatch(formData: FormData) {
     weekdays,
     start_time: requireText(formData, 'start_time', 'Start time'),
     end_time: requireText(formData, 'end_time', 'End time'),
-    capacity: Math.max(1, Number(formData.get('capacity')) || 20),
+    capacity: Math.min(15, Math.max(1, Number(formData.get('capacity')) || 15)), // studio policy: 15 max per batch, clamped server-side (the input's max=15 is only a UI hint)
     description: nullable(formData, 'description'),
     starts_on: nullable(formData, 'starts_on') ?? new Date().toISOString().slice(0, 10),
     ends_on: nullable(formData, 'ends_on'),
-    status: (formData.get('status') as string) || 'active',
+    status: ((formData.get('status') as string) || 'active') as BatchStatus,
   };
 
   if (batchPayload.ends_on && batchPayload.ends_on < batchPayload.starts_on) {
@@ -93,7 +93,7 @@ export async function saveBatch(formData: FormData) {
     const { error } = await admin.from('batch_meeting_credentials').upsert(
       {
         batch_id: batchId!,
-        provider: (formData.get('provider') as string) || 'zoom',
+        provider: ((formData.get('provider') as string) || 'zoom') as MeetingProvider,
         meeting_url: meetingUrl,
         meeting_id: nullable(formData, 'meeting_id'),
         passcode: nullable(formData, 'passcode'),
@@ -128,7 +128,7 @@ export async function setBatchStatus(formData: FormData) {
   await requireAdmin();
   const admin = createAdminClient();
   const id = formData.get('id') as string;
-  const status = formData.get('status') as string;
+  const status = formData.get('status') as BatchStatus;
 
   const { error } = await admin.from('batches').update({ status }).eq('id', id);
   if (error) throw new Error(`Could not update the batch status: ${error.message}`);

@@ -41,12 +41,19 @@ export default function ResetPasswordForm() {
 
   async function onSubmit(values: Input) {
     setServerError(null);
-    const { error } = await supabase.auth.updateUser({ password: values.password });
+    const { data, error } = await supabase.auth.updateUser({ password: values.password });
     if (error) {
       setServerError(error.message);
       return;
     }
-    router.push('/dashboard');
+    // Same admin-vs-member split as LoginForm -- an admin resetting their
+    // password should land back on /admin, not the member dashboard.
+    let destination = '/dashboard';
+    if (data.user) {
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
+      if (profile?.role === 'admin') destination = '/admin';
+    }
+    router.push(destination);
     router.refresh();
   }
 

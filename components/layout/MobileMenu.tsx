@@ -86,13 +86,13 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
         </motion.nav>
 
         <div className="flex items-center justify-between border-t border-ink/10 px-6 py-4">
-          <Link href="/contact" onClick={onClose} className="btn-outline !px-4 !py-2 !text-xs">
+          <Link href="/contact" onClick={onClose} className="btn-outline !px-5 !py-2.5 !text-xs">
             <span>Book Now</span>
           </Link>
           <div className="flex gap-3">
-            <a href="#" aria-label="Instagram" className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><Instagram size={14} /></a>
-            <a href="#" aria-label="YouTube" className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><Youtube size={14} /></a>
-            <a href="https://wa.me/917984925843" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><MessageCircle size={14} /></a>
+            <a href="https://www.instagram.com/yogawithlivingyoga" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><Instagram size={14} /></a>
+            <a href="#" aria-label="YouTube" className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><Youtube size={14} /></a>
+            <a href="https://wa.me/917984925843" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink hover:bg-ink/5"><MessageCircle size={14} /></a>
           </div>
         </div>
       </motion.div>

@@ -22,12 +22,22 @@ export default function LoginForm({ redirectedFrom }: { redirectedFrom?: string 
 
   async function onSubmit(values: LoginInput) {
     setServerError(null);
-    const { error } = await supabase.auth.signInWithPassword(values);
+    const { data, error } = await supabase.auth.signInWithPassword(values);
     if (error) {
       setServerError(error.message);
       return;
     }
-    router.push(redirectedFrom || '/dashboard');
+
+    // An explicit redirectedFrom (bounced here from a protected page) always
+    // wins. Otherwise send admins to /admin and everyone else to /dashboard
+    // -- previously this always went to /dashboard, so an admin logging in
+    // landed on the member dashboard instead of their own panel.
+    let destination = redirectedFrom;
+    if (!destination && data.user) {
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
+      destination = profile?.role === 'admin' ? '/admin' : '/dashboard';
+    }
+    router.push(destination || '/dashboard');
     router.refresh();
   }
 

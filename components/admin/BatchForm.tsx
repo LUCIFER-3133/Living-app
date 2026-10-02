@@ -136,10 +136,12 @@ export default function BatchForm({
                 name="capacity"
                 type="number"
                 min={1}
-                defaultValue={existing?.capacity ?? 20}
+                max={15}
+                defaultValue={existing?.capacity ?? 15}
                 required
                 className="input-field"
               />
+              <p className="mt-1 text-xs text-ink/50">Studio policy caps every batch at 15 students.</p>
             </div>
           </div>
 
